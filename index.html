@@ -1,4 +1,4 @@
-      <!DOCTYPE html><html lang="en">
+  <!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Ball Click Game</title>
@@ -37,7 +37,7 @@
   background: red;
   border-radius: 50%;
   cursor: pointer;
-  display: none; /* hidden before start */
+  display: none;
 }
 
   </style>
@@ -54,8 +54,7 @@
 
     let score = 0;
     let time = 0;
-    let gameRunning = false;
-    let gameTimeout = null;
+    let gameInterval = null;
     let timerInterval = null;
 
     function moveBall() {
@@ -70,56 +69,33 @@
     }
 
     ball.addEventListener("click", () => {
-      if (!gameRunning) return;
       score++;
       scoreText.innerText = "Score: " + score;
       moveBall();
     });
 
-    function gameLoop() {
-      if (!gameRunning) return;
-      moveBall();
-      gameTimeout = setTimeout(gameLoop, 1000);
-    }
+    function startGame() {
+      // STOP previous loops completely
+      if (gameInterval) clearInterval(gameInterval);
+      if (timerInterval) clearInterval(timerInterval);
 
-    function startTimer() {
+      // RESET values
+      score = 0;
+      time = 0;
+      scoreText.innerText = "Score: 0";
+      timerText.innerText = "Time: 0s";
+
+      ball.style.display = "block";
+
+      // START fresh loops (fixed speed)
+      gameInterval = setInterval(moveBall, 1000);
+
       timerInterval = setInterval(() => {
-        if (!gameRunning) return;
         time++;
         timerText.innerText = "Time: " + time + "s";
       }, 1000);
     }
 
-    startBtn.addEventListener("click", () => {
-      // clear previous loops
-      clearTimeout(gameTimeout);
-      clearInterval(timerInterval);
-
-      // reset game
-      score = 0;
-      time = 0;
-      gameRunning = true;
-
-      scoreText.innerText = "Score: 0";
-      timerText.innerText = "Time: 0s";
-
-      ball.style.display = "block";
-
-      gameLoop();
-      startTimer();
-    });("click", () => {
-      // reset game
-      score = 0;
-      time = 0;
-      gameRunning = true;
-
-      scoreText.innerText = "Score: 0";
-      timerText.innerText = "Time: 0s";
-
-      ball.style.display = "block";
-
-      gameLoop();
-      startTimer();
-    });
+    startBtn.addEventListener("click", startGame);
   </script></body>
-      </html>
+</html>          
