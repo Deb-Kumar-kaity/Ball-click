@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ball Click Game</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+    }
+    #score {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 20px;
+    }
+    #ball {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: red;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="score">Score: 0</div>
+  <div id="ball"></div>  <script>
+    const ball = document.getElementById("ball");
+    const scoreText = document.getElementById("score");
+    let score = 0;
+
+    function moveBall() {
+      const maxX = window.innerWidth - 60;
+      const maxY = window.innerHeight - 60;
+
+      const randomX = Math.random() * maxX;
+      const randomY = Math.random() * maxY;
+
+      ball.style.left = randomX + "px";
+      ball.style.top = randomY + "px";
+    }
+
+    ball.addEventListener("click", () => {
+      score++;
+      scoreText.innerText = "Score: " + score;
+      moveBall();
+    });
+
+    function gameLoop() {
+      moveBall();
+      setTimeout(gameLoop, 1000); // ball moves every 1 sec
+    }
+
+    gameLoop();
+  </script></body>
+</html>
