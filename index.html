@@ -10,12 +10,13 @@
       background: #111;
       color: #fff;
     }
-    #score {
+    #score, #timer {
       position: absolute;
-      top: 10px;
       left: 10px;
       font-size: 20px;
     }
+    #score { top: 10px; }
+    #timer { top: 40px; }
     #ball {
       position: absolute;
       width: 60px;
@@ -28,10 +29,14 @@
 </head>
 <body>
   <div id="score">Score: 0</div>
+  <div id="timer">Time: 0s</div>
   <div id="ball"></div>  <script>
     const ball = document.getElementById("ball");
     const scoreText = document.getElementById("score");
+    const timerText = document.getElementById("timer");
+
     let score = 0;
+    let time = 0;
 
     function moveBall() {
       const maxX = window.innerWidth - 60;
@@ -52,9 +57,17 @@
 
     function gameLoop() {
       moveBall();
-      setTimeout(gameLoop, 1000); // ball moves every 1 sec
+      setTimeout(gameLoop, 1000);
+    }
+
+    function startTimer() {
+      setInterval(() => {
+        time++;
+        timerText.innerText = "Time: " + time + "s";
+      }, 1000);
     }
 
     gameLoop();
+    startTimer();
   </script></body>
 </html>
