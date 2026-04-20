@@ -13,34 +13,52 @@
     #score, #timer {
       position: absolute;
       left: 10px;
-      font-size: 40px;
+      font-size: 32px;
+      font-weight: bold;
     }
     #score { top: 10px; }
-    #timer { top: 40px; }
-    #ball {
-      position: absolute;
-      width: 120px;
-      height: 120px;
-      background: blue;
-      border-radius: 50%;
-      cursor: pointer;
-    }
+    #timer { top: 50px; }#startBtn {
+  position: absolute;
+  top: 100px;
+  left: 10px;
+  padding: 10px 20px;
+  font-size: 20px;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  background: limegreen;
+  color: white;
+}
+
+#ball {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: red;
+  border-radius: 50%;
+  cursor: pointer;
+  display: none; /* hidden before start */
+}
+
   </style>
 </head>
 <body>
   <div id="score">Score: 0</div>
   <div id="timer">Time: 0s</div>
+  <button id="startBtn">Start Game</button>
   <div id="ball"></div>  <script>
     const ball = document.getElementById("ball");
     const scoreText = document.getElementById("score");
     const timerText = document.getElementById("timer");
+    const startBtn = document.getElementById("startBtn");
 
     let score = 0;
     let time = 0;
+    let gameRunning = false;
 
     function moveBall() {
-      const maxX = window.innerWidth - 60;
-      const maxY = window.innerHeight - 60;
+      const maxX = window.innerWidth - 100;
+      const maxY = window.innerHeight - 100;
 
       const randomX = Math.random() * maxX;
       const randomY = Math.random() * maxY;
@@ -50,24 +68,42 @@
     }
 
     ball.addEventListener("click", () => {
+      if (!gameRunning) return;
       score++;
       scoreText.innerText = "Score: " + score;
       moveBall();
     });
 
     function gameLoop() {
+      if (!gameRunning) return;
       moveBall();
       setTimeout(gameLoop, 1000);
     }
 
     function startTimer() {
-      setInterval(() => {
+      const interval = setInterval(() => {
+        if (!gameRunning) {
+          clearInterval(interval);
+          return;
+        }
         time++;
         timerText.innerText = "Time: " + time + "s";
       }, 1000);
     }
 
-    gameLoop();
-    startTimer();
+    startBtn.addEventListener("click", () => {
+      // reset game
+      score = 0;
+      time = 0;
+      gameRunning = true;
+
+      scoreText.innerText = "Score: 0";
+      timerText.innerText = "Time: 0s";
+
+      ball.style.display = "block";
+
+      gameLoop();
+      startTimer();
+    });
   </script></body>
 </html>
